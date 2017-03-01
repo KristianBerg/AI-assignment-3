@@ -1,7 +1,7 @@
 package model
 
 import scala.util.Random
-import scalaz._, Scalaz._
+import GridUtils._
 
 /**
   * Created by ine13kbe on 28/02/17.
@@ -23,7 +23,7 @@ class BotSimulator() {
     val chance: Double = Random.nextDouble()
     turnAround()
     def turnAround(): Unit = {
-      if (outOfBounds(pos |+| dirVector(direction))  || (chance > turnChance && direction == oldDir)){
+      if (outOfBounds(pos + dirVector(direction))  || (chance > turnChance && direction == oldDir)){
         direction = Random.nextInt(4)
         turnAround()
       } else {
@@ -34,19 +34,18 @@ class BotSimulator() {
       val (rPos, cPos) = pos1
       cPos < 0 || cPos >= cols || rPos < 0 || rPos >= rows
     }
-    def chebyshev(pos1: (Int, Int), pos2: (Int, Int)) = {math.max(math.abs(pos1._1 - pos2._1), math.abs(pos1._2 - pos2._2))}
-    pos = pos |+| dirVector(direction)
+    pos = pos + dirVector(direction)
     var sensorReading = pos
     val posChance: Double = Random.nextDouble()
     if(posChance < 0.1) {
 
     } else if(posChance < 0.5) {
-      while(chebyshev(sensorReading, pos) != 1){
-        sensorReading = pos |+| (Random.nextInt(3) - 1, Random.nextInt(3) - 1)
+      while((sensorReading cdist pos) != 1) {
+        sensorReading = pos + (Random.nextInt(3) - 1, Random.nextInt(3) - 1)
       }
     } else if(posChance < 0.9) {
-      while(chebyshev(sensorReading, pos) != 2){
-        sensorReading = pos |+| (Random.nextInt(5) - 2, Random.nextInt(5) - 2)
+      while((sensorReading cdist pos) != 2){
+        sensorReading = pos + (Random.nextInt(5) - 2, Random.nextInt(5) - 2)
       }
     } else {
       return None
