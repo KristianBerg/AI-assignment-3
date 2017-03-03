@@ -63,7 +63,7 @@ class AwesomeLocalizer extends EstimatorInterface {
 
   private def alphaUpdate() = {
     val index = sensorReadingToIndex(bot.reading)
-    alpha = 1 / (O(index) * f)
+    //alpha = 1 / (O(index) * f)
   }
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
