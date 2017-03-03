@@ -10,13 +10,15 @@ import breeze.linalg._
 class AwesomeLocalizer extends EstimatorInterface{
   val bot: BotSimulator = new BotSimulator()
   val grid = Grid(bot.rows, bot.cols)
+  val states = grid.length * 4;
   val sensorProb = for(reading <- grid) yield for(position <- grid) yield
     if((reading.cdist(position)) == 2) 0.025
     else if ((reading.cdist(position)) == 1) 0.05
     else if (reading == position) 0.1
     else 0
   val O = for(row <- sensorProb) yield
-    new DenseVector(row.toArray.flatMap(x => List.fill(4)(x/4)) :+ row.sum);
+    new DenseVector(row.toArray.flatMap(x => List.fill(4)(x/4)));
+
 
   override def getNumRows: Int = ???
 
@@ -26,7 +28,7 @@ class AwesomeLocalizer extends EstimatorInterface{
 
   override def update(): Unit = ???
 
-  override def getCurrentTruePosition: Array[Int] = ???
+  override def getCurrentTruePosition: Array[Int] = Array(bot.pos.x, bot.pos.y)
 
   override def getCurrentReading: Array[Int] = ???
 
