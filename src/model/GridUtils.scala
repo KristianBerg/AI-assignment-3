@@ -14,7 +14,11 @@ object GridUtils {
     import math._
     def cdist(o: Point) = max(abs(x - o.x), abs(y - o.y))
 
-    def moore(r: Int) = for(i <- x -r to x + r; j <- y -r to y + r if (this cdist (i, j)) == r) yield (i, j)
+    def moore(r: Int) = for(i <- x - r to x + r; j <- y - r to y + r if (this cdist (i, j)) == r) yield (i, j)
+
+    def mdist(o: Point) = abs(x - o.x) + abs(y - o.y)
+
+    def neumann(r: Int) = for(i <- x - r to x + r; j <- y - r to y + r if (this mdist (i, j)) == r) yield (i, j)
   }
 
   case class Grid(val h: Int, val w: Int) extends Seq[(Int, Int)] {
