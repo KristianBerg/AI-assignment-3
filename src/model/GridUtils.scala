@@ -12,12 +12,13 @@ object GridUtils {
     def +(o: Point) = (x + o.x, y + o.y)
 
     import math._
+    //Chebyshev distance
     def cdist(o: Point) = max(abs(x - o.x), abs(y - o.y))
-
+    //Moore neighbourhood
     def moore(r: Int) = for(i <- x - r to x + r; j <- y - r to y + r if (this cdist (i, j)) == r) yield (i, j)
-
+    //Manhattan distance
     def mdist(o: Point) = abs(x - o.x) + abs(y - o.y)
-
+    //Von Neumann neighbourhood
     def neumann(r: Int) = for(i <- x - r to x + r; j <- y - r to y + r if (this mdist (i, j)) == r) yield (i, j)
   }
 
