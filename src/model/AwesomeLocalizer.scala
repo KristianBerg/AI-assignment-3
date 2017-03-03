@@ -43,18 +43,20 @@ class AwesomeLocalizer extends EstimatorInterface {
   }
   var alpha: Double = 0
 
-  override def getNumRows: Int = ???
+  override def getNumRows: Int = bot.rows
 
-  override def getNumCols: Int = ???
+  override def getNumCols: Int = bot.cols
 
-  override def getNumHead: Int = ???
+  override def getNumHead: Int = 4
 
-  override def update(): Unit = ???
+  override def update(): Unit = bot.update()
 
   override def getCurrentTruePosition: Array[Int] = Array(bot.pos.x, bot.pos.y)
 
-  override def getCurrentReading: Array[Int] = ???
-
+  override def getCurrentReading: Array[Int] = bot.reading match {
+      case Some((x, y)) => Array(x, y)
+      case None => null
+    }
   override def getCurrentProb(x: Int, y: Int): Double = ???
 
   override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = ???
