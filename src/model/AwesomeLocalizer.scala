@@ -49,7 +49,12 @@ class AwesomeLocalizer extends EstimatorInterface {
 
   override def getNumHead: Int = 4
 
-  override def update(): Unit = bot.update()
+  override def update(): Unit = {
+    bot.update()
+    val sensorIndex = sensorReadingToIndex(bot.reading)
+    alpha = 1.0 / (O(sensorIndex).t * f)
+    f = alpha * (diag(O(sensorIndex)) * T.t) * f
+  }
 
   override def getCurrentTruePosition: Array[Int] = Array(bot.pos.x, bot.pos.y)
 
@@ -57,7 +62,7 @@ class AwesomeLocalizer extends EstimatorInterface {
       case Some((x, y)) => Array(x, y)
       case None => null
     }
-  override def getCurrentProb(x: Int, y: Int): Double = ???
+  override def getCurrentProb(x: Int, y: Int): Double = f()
 
   override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = (rX, rY) match {
     case (-1, -1) => noReadingProb(grid.indexOf((x, y)))
@@ -65,11 +70,6 @@ class AwesomeLocalizer extends EstimatorInterface {
   }
 
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double = ???
-
-  private def alphaUpdate() = {
-    val index = sensorReadingToIndex(bot.reading)
-    alpha = 1.0 / (O(index).t * f)
-  }
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
     reading match {
