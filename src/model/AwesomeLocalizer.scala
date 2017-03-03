@@ -69,7 +69,8 @@ class AwesomeLocalizer extends EstimatorInterface {
     case (rX, rY) => sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
   }
 
-  override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double = ???
+  override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double =
+    T(grid.indexOf((x,y)) * 4 + h, grid.indexOf((nX, nY)) * 4 + nH)
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
     reading match {
