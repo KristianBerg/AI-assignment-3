@@ -39,7 +39,7 @@ class AwesomeLocalizer extends EstimatorInterface {
     }).toArray)
 
   var f = DenseVector.fill(states.length) {
-    1 / states.length
+    1.0 / states.length
   }
   var alpha: Double = 0
 
@@ -63,7 +63,7 @@ class AwesomeLocalizer extends EstimatorInterface {
 
   private def alphaUpdate() = {
     val index = sensorReadingToIndex(bot.reading)
-    alpha = 1 / (O(index) * f)
+    alpha = 1.0 / (O(index).t * f)
   }
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
