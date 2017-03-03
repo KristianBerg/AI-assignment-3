@@ -76,7 +76,7 @@ class AwesomeLocalizer extends EstimatorInterface {
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
     reading match {
-      case Some((x, y)) => x * bot.rows * 4 + y
-      case None => states.length
+      case Some((x, y)) => x * bot.rows + y
+      case None => O.length - 1
     }
 }
