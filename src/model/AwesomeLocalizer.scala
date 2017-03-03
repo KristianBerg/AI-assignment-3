@@ -33,7 +33,7 @@ class AwesomeLocalizer extends EstimatorInterface{
         else if (inbound)
           0.7
         else
-          0.3 / free
+          0.3 / (free - 1)
       } else 0
     }).toArray)
 
