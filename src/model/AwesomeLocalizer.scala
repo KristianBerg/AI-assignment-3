@@ -22,7 +22,7 @@ class AwesomeLocalizer extends EstimatorInterface {
     new DenseVector(row.toArray.flatMap(x => List.fill(4)(x / 4)));
 
   val T = new DenseMatrix(states.length, states.length,
-    (for(from <- states; to <- states) yield {
+    (for(to <- states; from <- states) yield {
       import BotSimulator.dirVector;
       val (dir, newDir, pos, newPos) = (from % 4, to % 4, grid(from / 4), grid(to / 4))
       val colliding = !grid.contains(pos + dirVector(dir))
@@ -64,8 +64,10 @@ class AwesomeLocalizer extends EstimatorInterface {
     }
   override def getCurrentProb(x: Int, y: Int): Double = f(grid.indexOf((x, y)))
 
-  override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double =
-    sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
+  override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = (rX, rY) match {
+    case (-1, -1) => noReadingProb(grid.indexOf((x, y)))
+    case (rX, rY) => sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
+  }
 
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double = ???
 
