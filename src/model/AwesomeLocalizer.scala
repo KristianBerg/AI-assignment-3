@@ -11,18 +11,27 @@ class AwesomeLocalizer extends EstimatorInterface{
   val bot: BotSimulator = new BotSimulator()
   val grid = Grid(bot.rows, bot.cols)
   val states = 0 to grid.length * 4;
-  val sensorProb = (for(reading <- grid) yield for(position <- grid) yield
+  val sensorProb = for(reading <- grid) yield for(position <- grid) yield
     if((reading.cdist(position)) == 2) 0.025
     else if ((reading.cdist(position)) == 1) 0.05
     else if (reading == position) 0.1
-    else 0)
+    else 0
+  val noReadingProb = for(i <- states) yield 1 - sensorProb(i).sum
 
-  val O = for(row <- sensorProb) yield
+  val O = for(row <- sensorProb :+ noReadingProb) yield
     new DenseVector(row.toArray.flatMap(x => List.fill(4)(x/4)));
 
   val T = new DenseMatrix(states.length, states.length,
-    (for(from <- states; to <- states) yield
-      from + to).toArray)
+    (for(from <- states; to <- states) yield {
+      import BotSimulator.dirVector
+      val dir = from % 4; val newdir = to % 4
+      val colliding = !grid.contains(grid(from / 4) + dirVector(dir))
+      val free = grid(from / 4).moore(1).filter(_ in grid).size
+      if(colliding)
+        1.0
+      else
+        3.0
+    }).toArray)
 
   override def getNumRows: Int = ???
 

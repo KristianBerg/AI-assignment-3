@@ -7,14 +7,10 @@ import GridUtils._
   * Created by ine13kbe on 28/02/17.
   */
 class BotSimulator(val rows: Int, val cols: Int) {
+  import BotSimulator._
   def this(both: Int = 4) = this(both, both)
 
   val turnChance: Double = 0.3
-  val UP = (-1, 0)
-  val RIGHT = (0, 1)
-  val DOWN = (1, 0)
-  val LEFT = (0, -1)
-  val dirVector = Vector(UP, RIGHT, DOWN, LEFT)
   var pos: (Int, Int) = (Random.nextInt(rows), Random.nextInt(cols))
   var direction: Int = Random.nextInt(4)
   var reading: Option[Int] = None
@@ -60,4 +56,12 @@ class BotSimulator(val rows: Int, val cols: Int) {
   }
 
   override def toString(): String = "row: " + pos._1 + " col: " + pos._2
+}
+
+object BotSimulator {
+  val UP = (-1, 0)
+  val RIGHT = (0, 1)
+  val DOWN = (1, 0)
+  val LEFT = (0, -1)
+  val dirVector = Vector(UP, RIGHT, DOWN, LEFT)
 }
