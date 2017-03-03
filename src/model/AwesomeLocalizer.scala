@@ -24,6 +24,9 @@ class AwesomeLocalizer extends EstimatorInterface{
     (for(from <- states; to <- states) yield
       from + to).toArray)
 
+  var f = DenseVector.fill(states.length){1/states.length}
+  var alpha = 0
+
   override def getNumRows: Int = ???
 
   override def getNumCols: Int = ???
@@ -41,4 +44,12 @@ class AwesomeLocalizer extends EstimatorInterface{
   override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = ???
 
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double = ???
+
+  private def alphaUpdate() =
+    alpha = 0
+
+    for (i <- 0 to states.length){
+      //alpha += f(i) + sensorProb
+    }
+
 }
