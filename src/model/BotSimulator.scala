@@ -64,4 +64,5 @@ object BotSimulator {
   val DOWN = (1, 0)
   val LEFT = (0, -1)
   val dirVector = Vector(UP, RIGHT, DOWN, LEFT)
+  val dirs = 4
 }

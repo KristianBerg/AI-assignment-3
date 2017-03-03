@@ -7,10 +7,11 @@ import breeze.linalg._
 /**
   * Created by ine13kbe on 28/02/17.
   */
-class AwesomeLocalizer extends EstimatorInterface {
-  val bot: BotSimulator = new BotSimulator()
+class AwesomeLocalizer(val gridSize: Int) extends EstimatorInterface {
+  val bot: BotSimulator = new BotSimulator(gridSize)
+  import BotSimulator.dirs
   val grid = Grid(bot.rows, bot.cols)
-  val states = 0 until grid.length * 4;
+  val states = 0 until grid.length * dirs;
   val sensorProb = for (reading <- grid) yield for (position <- grid) yield
     if ((reading.cdist(position)) == 2) 0.025
     else if ((reading.cdist(position)) == 1) 0.05
@@ -24,7 +25,7 @@ class AwesomeLocalizer extends EstimatorInterface {
   val T = new DenseMatrix(states.length, states.length,
     (for (to <- states; from <- states) yield {
       import BotSimulator.dirVector;
-      val (dir, newDir, pos, newPos) = (from % 4, to % 4, grid(from / 4), grid(to / 4))
+      val (dir, newDir, pos, newPos) = (from % dirs, to % dirs, grid(from / dirs), grid(to / dirs))
       val colliding = !grid.contains(pos + dirVector(dir))
       val free = pos.neumann(1).filter(_ in grid).size
       val inbound = pos + dirVector(dir) == newPos
@@ -49,7 +50,7 @@ class AwesomeLocalizer extends EstimatorInterface {
 
   override def getNumCols: Int = bot.cols
 
-  override def getNumHead: Int = 4
+  override def getNumHead: Int = dirs
 
   override def update(): Unit = {
     bot.update()
@@ -87,11 +88,11 @@ class AwesomeLocalizer extends EstimatorInterface {
 
 
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double =
-    T(grid.indexOf((x, y)) * 4 + h, grid.indexOf((nX, nY)) * 4 + nH)
+    T(grid.indexOf((x, y)) * dirs + h, grid.indexOf((nX, nY)) * dirs + nH)
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
     reading match {
-      case Some((x, y)) => x * bot.rows + y
+      case Some((x, y)) => x * bot.cols + y
       case None => O.length - 1
     }
 }
