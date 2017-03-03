@@ -42,6 +42,8 @@ class AwesomeLocalizer extends EstimatorInterface {
     1.0 / states.length
   }
   var alpha: Double = 0
+  var averageAccuracy: Double = 0
+  var numberOfIterations: Int = 0
 
   override def getNumRows: Int = bot.rows
 
@@ -54,6 +56,16 @@ class AwesomeLocalizer extends EstimatorInterface {
     val sensorIndex = sensorReadingToIndex(bot.reading)
     alpha = 1.0 / (O(sensorIndex).t * f)
     f = alpha * (diag(O(sensorIndex)) * T.t) * f
+
+    // average accuracy calculations and printout
+    numberOfIterations += 1
+    val predictionIndex: (Int, Int) = grid(argmax(f)/4)
+    val distance: Double = bot.pos.mdist(predictionIndex)
+    averageAccuracy = averageAccuracy * (numberOfIterations - 1.0)/numberOfIterations + distance/numberOfIterations
+    if(numberOfIterations % 10000 == 0){
+      println("prediction: " + predictionIndex + " | actual: " + bot.pos)
+      println(numberOfIterations + "\tdistance: " + distance + "\taverage accuracy: " + averageAccuracy)
+    }
   }
 
   override def getCurrentTruePosition: Array[Int] = Array(bot.pos.x, bot.pos.y)
