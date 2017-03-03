@@ -13,9 +13,9 @@ class BotSimulator(val rows: Int, val cols: Int) {
   val turnChance: Double = 0.3
   var pos: (Int, Int) = (Random.nextInt(rows), Random.nextInt(cols))
   var direction: Int = Random.nextInt(4)
-  var reading: Option[Int] = None
+  var reading: Option[(Int, Int)] = None
 
-  def update(): Option[Int] = {
+  def update(): Option[(Int, Int)] = {
     val oldDir = direction
     val chance: Double = Random.nextDouble()
     turnAround()
@@ -51,7 +51,7 @@ class BotSimulator(val rows: Int, val cols: Int) {
     if(outOfBounds(sensorReading)){
       return None
     }
-    reading = Some(sensorReading._1 * cols + sensorReading._2)
+    reading = Some(sensorReading)
     return reading
   }
 
