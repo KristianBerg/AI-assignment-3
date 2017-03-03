@@ -26,8 +26,8 @@ class AwesomeLocalizer extends EstimatorInterface {
       import BotSimulator.dirVector;
       val (dir, newDir, pos, newPos) = (from % 4, to % 4, grid(from / 4), grid(to / 4))
       val colliding = !grid.contains(pos + dirVector(dir))
-      val free = pos.moore(1).filter(_ in grid).size
-      val inbound = pos + dirVector(newDir) == newPos
+      val free = pos.neumann(1).filter(_ in grid).size
+      val inbound = pos + dirVector(dir) == newPos
       if(newPos == pos + dirVector(newDir)) {
         if (colliding)
           1.0 / free
