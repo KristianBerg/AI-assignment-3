@@ -17,6 +17,7 @@ class BotSimulator(val rows: Int, val cols: Int) {
   val dirVector = Vector(UP, RIGHT, DOWN, LEFT)
   var pos: (Int, Int) = (Random.nextInt(rows), Random.nextInt(cols))
   var direction: Int = Random.nextInt(4)
+  var reading: Option[Int] = None
 
   def update(): Option[Int] = {
     val oldDir = direction
@@ -36,6 +37,7 @@ class BotSimulator(val rows: Int, val cols: Int) {
     }
     pos = pos + dirVector(direction)
     var sensorReading = pos
+    reading = None
     val posChance: Double = Random.nextDouble()
     if(posChance < 0.1) {
 
@@ -53,7 +55,8 @@ class BotSimulator(val rows: Int, val cols: Int) {
     if(outOfBounds(sensorReading)){
       return None
     }
-    return Some(sensorReading._1 * cols + sensorReading._2)
+    reading = Some(sensorReading._1 * cols + sensorReading._2)
+    return reading
   }
 
   override def toString(): String = "row: " + pos._1 + " col: " + pos._2
