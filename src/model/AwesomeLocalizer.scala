@@ -61,16 +61,8 @@ class AwesomeLocalizer extends EstimatorInterface {
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double = ???
 
   private def alphaUpdate() = {
-    alpha = 0
     val index = sensorReadingToIndex(bot.reading)
-    var readProb: Int = 0
-    if (bot.reading == None) {
-      alpha = f * noReadingProb
-    } else {
-      for (i <- 0 to states.length) {
-        //alpha += f(i) + sensorProb
-      }
-    }
+    alpha = 1 / (O(index) * f)
   }
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
