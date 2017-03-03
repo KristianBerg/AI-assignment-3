@@ -6,9 +6,9 @@ import GridUtils._
 /**
   * Created by ine13kbe on 28/02/17.
   */
-class BotSimulator() {
-  val rows = 4
-  val cols = 4
+class BotSimulator(val rows: Int, val cols: Int) {
+  def this(both: Int = 4) = this(both, both)
+
   val turnChance: Double = 0.3
   val UP = (-1, 0)
   val RIGHT = (0, 1)
