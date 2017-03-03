@@ -63,12 +63,15 @@ class AwesomeLocalizer extends EstimatorInterface {
     case None => null
   }
 
-  override def getCurrentProb(x: Int, y: Int): Double = f(grid.indexOf((x, y)))
+  override def getCurrentProb(x: Int, y: Int): Double = {
+    val startIndex: Int = grid.indexOf((x, y)) * 4
+    sum(f.slice(startIndex, startIndex + 4))
+  }
 
   override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = return (rX, rY) match {
-      case (_, -1) | (-1, _) | (-1, -1) => noReadingProb(grid.indexOf((x, y)))
-      case (rX, rY) => sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
-    }
+    case (_, -1) | (-1, _) | (-1, -1) => noReadingProb(grid.indexOf((x, y)))
+    case (rX, rY) => sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
+  }
 
 
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double =
