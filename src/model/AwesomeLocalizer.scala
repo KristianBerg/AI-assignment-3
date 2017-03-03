@@ -20,7 +20,7 @@ class AwesomeLocalizer(val gridSize: Int) extends EstimatorInterface {
   val noReadingProb = for (i <- 0 until grid.length) yield 1 - sensorProb(i).sum
 
   val O = for (row <- sensorProb :+ noReadingProb) yield
-    new DenseVector(row.toArray.flatMap(x => List.fill(4)(x / 4)));
+    new DenseVector(row.toArray.flatMap(x => List.fill(dirs)(x / dirs)));
 
   val T = new DenseMatrix(states.length, states.length,
     (for (to <- states; from <- states) yield {

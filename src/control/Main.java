@@ -14,7 +14,7 @@ public class Main {
 		int gridSize = 4;
 		if(args.length > 0)
 			gridSize = Integer.parseInt(args[0]);
-		
+
 		/*
 		 * generate you own localiser / estimator wrapper here to plug it into the 
 		 * graphics class.
