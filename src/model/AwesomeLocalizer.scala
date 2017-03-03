@@ -15,7 +15,8 @@ class AwesomeLocalizer extends EstimatorInterface{
     else if ((reading.cdist(position)) == 1) 0.05
     else if (reading == position) 0.1
     else 0
-  
+  val O = for(row <- sensorProb) yield
+    new DenseVector(row.toArray.flatMap(x => List.fill(4)(x/4)) :+ row.sum);
 
   override def getNumRows: Int = ???
 
