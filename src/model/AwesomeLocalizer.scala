@@ -34,7 +34,7 @@ class AwesomeLocalizer extends EstimatorInterface {
         else if (inbound)
           0.7
         else
-          {println(free); 0.3 / (free - 1)}
+          0.3 / (free - 1)
       } else 0
     }).toArray)
 
@@ -59,7 +59,8 @@ class AwesomeLocalizer extends EstimatorInterface {
     }
   override def getCurrentProb(x: Int, y: Int): Double = ???
 
-  override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = ???
+  override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double =
+    sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
 
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double = ???
 
