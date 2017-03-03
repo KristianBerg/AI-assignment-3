@@ -25,5 +25,9 @@ public class Main {
 		 * you can only click through your localisation stepwise
 		 */
 		new LocalizationDriver( 500, viewer).start();
+		// uncomment below to test average accuracy over multiple iterations
+		/*while(true){
+			l.update();
+		}*/
 	}
 }	
