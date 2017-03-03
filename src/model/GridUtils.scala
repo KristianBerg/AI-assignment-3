@@ -24,7 +24,12 @@ object GridUtils {
   case class Grid(val h: Int, val w: Int) extends Seq[(Int, Int)] {
     def length: Int = h*w
 
-    override def apply(i: Int) = (i / h, i % w)
+    override def apply(i: Int) = (i / w, i % w)
+
+    override def indexOf[B >: (Int, Int)](elem: B): Int = elem match {
+      case (x: Int, y: Int) if contains((x,y)) => x * w + y
+      case _ => -1
+    }
 
     override def iterator: Iterator[(Int, Int)] = Iterator.tabulate(length)(this(_))
 
