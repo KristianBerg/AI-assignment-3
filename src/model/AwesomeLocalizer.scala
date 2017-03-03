@@ -62,7 +62,7 @@ class AwesomeLocalizer extends EstimatorInterface {
       case Some((x, y)) => Array(x, y)
       case None => null
     }
-  override def getCurrentProb(x: Int, y: Int): Double = f()
+  override def getCurrentProb(x: Int, y: Int): Double = f(grid.indexOf((x, y)))
 
   override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double =
     sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
