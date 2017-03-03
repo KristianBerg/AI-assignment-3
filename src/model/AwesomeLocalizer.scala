@@ -10,7 +10,7 @@ import breeze.linalg._
 class AwesomeLocalizer extends EstimatorInterface {
   val bot: BotSimulator = new BotSimulator()
   val grid = Grid(bot.rows, bot.cols)
-  val states = 0 to grid.length * 4;
+  val states = 0 until grid.length * 4;
   val sensorProb = for (reading <- grid) yield for (position <- grid) yield
     if ((reading.cdist(position)) == 2) 0.025
     else if ((reading.cdist(position)) == 1) 0.05
