@@ -16,19 +16,19 @@ class AwesomeLocalizer extends EstimatorInterface {
     else if ((reading.cdist(position)) == 1) 0.05
     else if (reading == position) 0.1
     else 0
-  val noReadingProb = for(i <- 0 until grid.length) yield 1 - sensorProb(i).sum
+  val noReadingProb = for (i <- 0 until grid.length) yield 1 - sensorProb(i).sum
 
   val O = for (row <- sensorProb :+ noReadingProb) yield
     new DenseVector(row.toArray.flatMap(x => List.fill(4)(x / 4)));
 
   val T = new DenseMatrix(states.length, states.length,
-    (for(to <- states; from <- states) yield {
+    (for (to <- states; from <- states) yield {
       import BotSimulator.dirVector;
       val (dir, newDir, pos, newPos) = (from % 4, to % 4, grid(from / 4), grid(to / 4))
       val colliding = !grid.contains(pos + dirVector(dir))
       val free = pos.neumann(1).filter(_ in grid).size
       val inbound = pos + dirVector(dir) == newPos
-      if(newPos == pos + dirVector(newDir)) {
+      if (newPos == pos + dirVector(newDir)) {
         if (colliding)
           1.0 / free
         else if (inbound)
@@ -59,18 +59,20 @@ class AwesomeLocalizer extends EstimatorInterface {
   override def getCurrentTruePosition: Array[Int] = Array(bot.pos.x, bot.pos.y)
 
   override def getCurrentReading: Array[Int] = bot.reading match {
-      case Some((x, y)) => Array(x, y)
-      case None => null
-    }
-  override def getCurrentProb(x: Int, y: Int): Double = f(grid.indexOf((x, y)))
-
-  override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = (rX, rY) match {
-    case (-1, -1) => noReadingProb(grid.indexOf((x, y)))
-    case (rX, rY) => sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
+    case Some((x, y)) => Array(x, y)
+    case None => null
   }
 
+  override def getCurrentProb(x: Int, y: Int): Double = f(grid.indexOf((x, y)))
+
+  override def getOrXY(rX: Int, rY: Int, x: Int, y: Int): Double = return (rX, rY) match {
+      case (_, -1) | (-1, _) | (-1, -1) => noReadingProb(grid.indexOf((x, y)))
+      case (rX, rY) => sensorProb(grid.indexOf((rX, rY)))(grid.indexOf((x, y)))
+    }
+
+
   override def getTProb(x: Int, y: Int, h: Int, nX: Int, nY: Int, nH: Int): Double =
-    T(grid.indexOf((x,y)) * 4 + h, grid.indexOf((nX, nY)) * 4 + nH)
+    T(grid.indexOf((x, y)) * 4 + h, grid.indexOf((nX, nY)) * 4 + nH)
 
   private def sensorReadingToIndex(reading: Option[(Int, Int)]): Int =
     reading match {
