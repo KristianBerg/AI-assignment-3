@@ -54,29 +54,29 @@ class AwesomeLocalizer(val gridSize: Int) extends EstimatorInterface {
 
   override def update(): Unit = {
     bot.update()
-    val oldf = f
+    //val oldf = f
     val sensorIndex = sensorReadingToIndex(bot.reading)
     //alpha = 1.0 / (O(sensorIndex).t * f)
     //if (alpha.isNaN() || alpha.isInfinite()) alpha = 0.01
     f = /*alpha **/ (diag(O(sensorIndex)) * T.t) * f
-    f.map(x => if (x < 1e-9) 0 else x)
-    f = f :/ sum(f)
+    //f.map(x => if (x < 1e-9) 0 else x)
+    f = f /:/ sum(f)
     // average accuracy calculations and printout
     numberOfIterations += 1
     val predictionIndex: (Int, Int) = grid(argmax(f)/4)
     val distance: Double = bot.pos.mdist(predictionIndex)
     averageAccuracy = averageAccuracy * (numberOfIterations - 1.0)/numberOfIterations + distance/numberOfIterations
-    if(numberOfIterations % 5 == 0){
+    /*if(numberOfIterations % 5 == 0){
       println(s"Sum of f: ${sum(f)}")
       println("prediction: " + predictionIndex + " | actual: " + bot.pos)
       println(numberOfIterations + "\tdistance: " + distance + "\taverage accuracy: " + averageAccuracy)
-    }
-    if(f(0).isNaN()) {
+    }*/
+    /*if(f(0).isNaN()) {
       println(oldf)
       println(O(sensorIndex).t * oldf)
       println(s"Sensor repeorts at: ${grid(sensorIndex / dirs)}")
       throw new Exception()
-    }
+    }*/
   }
 
   override def getCurrentTruePosition: Array[Int] = Array(bot.pos.x, bot.pos.y)
