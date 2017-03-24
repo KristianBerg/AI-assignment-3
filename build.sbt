@@ -7,6 +7,8 @@ scalaVersion := "2.11.8"
 javaSource in Compile := baseDirectory.value / "src"
 scalaSource in Compile := baseDirectory.value / "src"
 
+mainClass in (Compile, run) := Some("control.Main")
+
 libraryDependencies  ++= Seq(
   "org.scalanlp" %% "breeze" % "0.13",
   "org.scalanlp" %% "breeze-natives" % "0.13",
